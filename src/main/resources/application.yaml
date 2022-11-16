@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://${DATASOURCE_HOST:localhost}:${DATASOURCE_PORT:5432}/cats-api
-    username: admin
-    password: admin
-  server:
-    servlet:
-      context-path: /${SERVICE_NAME:cats-api}
-    port: ${SERVICE_PORT:8088}
