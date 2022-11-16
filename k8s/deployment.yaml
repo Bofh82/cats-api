@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: cats-api
-        image: devlifestartup/cats-api:latest
+        image: devlifestartup/JOB_BASE_NAME:BUILD_NUMBER
         ports:
         - containerPort: 8088
         env:
