@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat ./deployment.yaml |
+cat ./k8s/deployment.yaml |
 sed -r "s/ENV_JOB_BASE_NAME/$1/g" |
 sed -r "s/ENV_BUILD_NUMBER/$2/g;" |
 sed -r "s/ENV_DATASOURCE_HOST/$3/g;" |
