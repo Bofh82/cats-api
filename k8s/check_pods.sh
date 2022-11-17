@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 30
+sleep 30s
 
 result=$(kubectl rollout status deployment $1 -n default --timeout=90s 2>&1 >/dev/null)
 
