@@ -1,26 +1,17 @@
 #!/bin/bash
 
-# wait for completion as background process - capture PID
-#kubectl wait pods -l app=$1 --for=condition=Ready --timeout=60s & completion_pid=$!
-#kubectl wait deployment/$1 --for=condition=Ready --timeout=60s & completion_pid=$!
-#kubectl wait deployment -n default $1 --for condition=Available=True --timeout=60s & completion_pid=$!
-kubectl wait pods -n default -l app=$1 --for=condition=Ready --timeout=120s & completion_pid=$!
+sleep 30
 
-# wait for failure as background process - capture PID
-#kubectl wait pods -l app=$1 --for=condition=Ready=false --timeout=60s && exit 1 & failure_pid=$!
-#kubectl wait deployment/$1 --for=condition=Ready --timeout=60s && exit 1 & failure_pid=$!
-#kubectl wait deployment -n default $1 --for condition=Available=False --timeout=60s && exit 1 & failure_pid=$!
-kubectl wait pods -n default -l app=$1 --for=condition=Ready=false --timeout=120s && exit 1 & failure_pid=$!
+result=$(kubectl rollout status deployment $1 -n default --timeout=90s 2>&1 >/dev/null)
 
-# capture exit code of the first subprocess to exit
-wait -n $completion_pid $failure_pid
-
-# store exit code in variable
-exit_code=$?
-if (( $exit_code == 0 )); then
-  echo "Job completed"
+if echo $result | grep -q 'error'; then
+    echo "Check result: $result"
+    exit_code=1
+    echo "Build failed with exit code ${exit_code}, exiting..."
+    kubectl logs -l app=$1 --tail=100
 else
-  echo "Job failed with exit code ${exit_code}, exiting..."
-  kubectl logs -l app=$1 --tail=100
+    echo "Build completed"
+    exit_code=0
 fi
 exit $exit_code
+
