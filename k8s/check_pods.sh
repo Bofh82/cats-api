@@ -1,9 +1,8 @@
 #!/bin/bash
 
-sleep 60s
+sleep $1
 
-result=$(kubectl wait deployment -n default $1 --for=condition=Ready --timeout=90s 2>&1 >/dev/null)
-#result=$(kubectl rollout status deployment $1 -n default --timeout=90s 2>&1 >/dev/null)
+result=$(kubectl wait deployment -n default $2 --for=condition=Ready --timeout=30s 2>&1 >/dev/null)
 
 if echo $result | grep -q 'error'; then
     echo "Check result: $result"
