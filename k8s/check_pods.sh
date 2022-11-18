@@ -16,6 +16,7 @@ exit_code=$?
 if (( $exit_code == 0 )); then
   echo "Job completed"
 else
+  kubectl logs -l app=$2 --tail=100
   echo "Job failed with exit code ${exit_code}, exiting..."
 fi
 exit $exit_code
